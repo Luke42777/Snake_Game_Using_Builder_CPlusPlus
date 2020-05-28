@@ -51,7 +51,7 @@ void resetTimers()
         Form1->head->Top = 200;
 
         //play intro sound
-        sndPlaySound("snd/intro.wav",SND_ASYNC);
+        //sndPlaySound("snd/intro.wav",SND_ASYNC);
         resetTimers();
 
 }
@@ -59,22 +59,39 @@ void resetTimers()
 
 void __fastcall TForm1::downTimer(TObject *Sender)
 {
-   head->Top += 10;       
+   head->Top += 6;
+    if((head->Top + head->Height) >= playField->Height)
+    {
+      head->Top = 0;
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
-    head->Left -= 10;
+    head->Left -= 6;
+    if((head->Left) <= 0)
+    {
+      head->Left = playField->Width - 10;
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
-         head->Left += 10;
+   head->Left += 6;
+   if((head->Left + head->Width) > playField->Width)
+    {
+      head->Left = 0;
+    }
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::upTimer(TObject *Sender)
 {
-     head->Top -= 10;    
+     head->Top -= 6;
+   if(head->Top + 10  <= 0)
+    {
+      head->Top = playField->Height - head->Height;
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -83,10 +100,12 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+
 void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
-  if(Key == VK_UP)
+    if(Key == VK_UP)
   {
         head->Picture->LoadFromFile("img/leb.bmp");
         resetTimers();

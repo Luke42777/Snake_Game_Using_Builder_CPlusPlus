@@ -5,6 +5,8 @@ object Form1: TForm1
   Height = 542
   Caption = 'Snake v.1.0.'
   Color = clBtnFace
+  UseDockManager = True
+  DockSite = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -20,7 +22,6 @@ object Form1: TForm1
     Top = -8
     Width = 450
     Height = 450
-    AutoSize = True
     Picture.Data = {
       07544269746D6170C6480900424DC6480900000000003600000028000000C201
       0000C2010000010018000000000090480900232E0000232E0000000000000000
@@ -19379,28 +19380,28 @@ object Form1: TForm1
   end
   object left: TTimer
     Enabled = False
-    Interval = 50
+    Interval = 70
     OnTimer = leftTimer
     Left = 8
     Top = 48
   end
   object right: TTimer
     Enabled = False
-    Interval = 50
+    Interval = 70
     OnTimer = rightTimer
     Left = 72
     Top = 48
   end
   object up: TTimer
     Enabled = False
-    Interval = 50
+    Interval = 70
     OnTimer = upTimer
     Left = 40
     Top = 8
   end
   object down: TTimer
     Enabled = False
-    Interval = 50
+    Interval = 70
     OnTimer = downTimer
     Left = 40
     Top = 88

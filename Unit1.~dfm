@@ -12,7 +12,7 @@ object Form1: TForm1
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
-  OnKeyPress = FormKeyPress
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object playField: TImage
@@ -19285,6 +19285,7 @@ object Form1: TForm1
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000000000000}
     Transparent = True
+    Visible = False
   end
   object fruit: TImage
     Left = 176

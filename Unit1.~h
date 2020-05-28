@@ -26,7 +26,8 @@ __published:	// IDE-managed Components
         void __fastcall rightTimer(TObject *Sender);
         void __fastcall upTimer(TObject *Sender);
         void __fastcall FormCreate(TObject *Sender);
-        void __fastcall FormKeyPress(TObject *Sender, char &Key);
+        void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
