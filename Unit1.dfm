@@ -19378,6 +19378,19 @@ object Form1: TForm1
       000000000000000000000000000000000000}
     Transparent = True
   end
+  object Label1: TLabel
+    Left = 8
+    Top = 456
+    Width = 153
+    Height = 36
+    AutoSize = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clMaroon
+    Font.Height = -31
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   object left: TTimer
     Enabled = False
     Interval = 70

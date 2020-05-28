@@ -11,12 +11,27 @@
 TForm1 *Form1;
 int xFruit = 0;
 int yFruit = 0;
+int score = 0;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
 {
 }
 //---------------------------------------------------------------------------
+bool isFruitBeingEaten()
+ {
+     if( Form1->head->Left + Form1->head->Width >= Form1->fruit->Left
+       && Form1->head->Left  <= Form1->fruit->Left + Form1->fruit->Width
+       && Form1->head->Top + Form1->head->Height  >= Form1->fruit->Top
+       && Form1->head->Top  <= Form1->fruit->Top + Form1->fruit->Height)
+        {
+           return true;
+        }
+      else
+        {
+           return false;
+        }
+ }
 //-----------------------------------------------------------------------
 void resetTimers()
  {
@@ -50,29 +65,58 @@ void resetTimers()
         Form1->head->Left = 200;
         Form1->head->Top = 200;
 
+        score = 0;
+
         //play intro sound
-        //sndPlaySound("snd/intro.wav",SND_ASYNC);
+        sndPlaySound("snd/intro.wav",SND_ASYNC);
         resetTimers();
+        //initial label caption
+        Form1->Label1->Caption = "Score: " + IntToStr(score);
+
 
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::downTimer(TObject *Sender)
 {
-   head->Top += 6;
+
+    head->Top += 6;
     if((head->Top + head->Height) >= playField->Height)
     {
       head->Top = 0;
     }
+
+     if(isFruitBeingEaten() == true)
+    {
+       sndPlaySound("snd/eating.wav",SND_ASYNC);
+       setFruitLocation();
+       score++;
+
+
+
+    }
+    Form1->Label1->Caption = "Score: " + IntToStr(score);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
+
     head->Left -= 6;
     if((head->Left) <= 0)
     {
       head->Left = playField->Width - 10;
     }
+
+    if(isFruitBeingEaten() == true)
+    {
+       sndPlaySound("snd/eating.wav",SND_ASYNC);
+       setFruitLocation();
+       score++;
+
+
+
+    }
+    Form1->Label1->Caption = "Score: " + IntToStr(score);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
@@ -82,6 +126,16 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
     {
       head->Left = 0;
     }
+      if(isFruitBeingEaten() == true)
+    {
+       sndPlaySound("snd/eating.wav",SND_ASYNC);
+       setFruitLocation();
+       score++;
+
+
+
+    }
+    Form1->Label1->Caption = "Score: " + IntToStr(score);
 
 }
 //---------------------------------------------------------------------------
@@ -92,6 +146,16 @@ void __fastcall TForm1::upTimer(TObject *Sender)
     {
       head->Top = playField->Height - head->Height;
     }
+      if(isFruitBeingEaten() == true)
+    {
+       sndPlaySound("snd/eating.wav",SND_ASYNC);
+       setFruitLocation();
+       score++;
+
+
+
+    }
+    Form1->Label1->Caption = "Score: " + IntToStr(score);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -105,27 +169,27 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
-    if(Key == VK_UP)
+    if(Key == VK_UP && up->Enabled == false) //(up->Enabled == false)to prevent stopping head when holding key
   {
         head->Picture->LoadFromFile("img/leb.bmp");
         resetTimers();
         up->Enabled = true;
 
    }
-  if(Key == VK_LEFT)
+  if(Key == VK_LEFT && left->Enabled == false)
   {
         head->Picture->LoadFromFile("img/lebWlewo.bmp");
         resetTimers();
         left->Enabled = true;
    }
 
-  if(Key == VK_DOWN)
+  if(Key == VK_DOWN && down->Enabled == false)
  {
         head->Picture->LoadFromFile("img/lebWdol.bmp");
         resetTimers();
         down->Enabled = true;
  }
- if(Key == VK_RIGHT)
+ if(Key == VK_RIGHT && right->Enabled == false   )
  {
        head->Picture->LoadFromFile("img/lebWprawo.bmp");
        resetTimers();

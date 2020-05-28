@@ -21,6 +21,7 @@ __published:	// IDE-managed Components
         TTimer *right;
         TTimer *up;
         TTimer *down;
+        TLabel *Label1;
         void __fastcall downTimer(TObject *Sender);
         void __fastcall leftTimer(TObject *Sender);
         void __fastcall rightTimer(TObject *Sender);
