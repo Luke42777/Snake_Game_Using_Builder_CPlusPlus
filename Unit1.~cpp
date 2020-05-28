@@ -20,10 +20,10 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //---------------------------------------------------------------------------
 bool isFruitBeingEaten()
  {
-     if( Form1->head->Left + Form1->head->Width >= Form1->fruit->Left
-       && Form1->head->Left  <= Form1->fruit->Left + Form1->fruit->Width
-       && Form1->head->Top + Form1->head->Height  >= Form1->fruit->Top
-       && Form1->head->Top  <= Form1->fruit->Top + Form1->fruit->Height)
+     if( Form1->head->Left + Form1->head->Width - 5 > Form1->fruit->Left
+       && Form1->head->Left + 5  < Form1->fruit->Left + Form1->fruit->Width
+       && Form1->head->Top + Form1->head->Height  - 5   > Form1->fruit->Top
+       && Form1->head->Top + 5  < Form1->fruit->Top + Form1->fruit->Height)
         {
            return true;
         }
