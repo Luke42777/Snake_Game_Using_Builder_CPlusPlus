@@ -11,6 +11,8 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 13
   object playField: TImage
@@ -19035,7 +19037,6 @@ object Form1: TForm1
       EDFEC6EEFEC6EEFEC4ECFDC3ECFDC4EDFEC3ECFDC1EAFCC2EAFCC3EBFCC1EAFC
       C0E8FBBFE7F9BCE4F7BDE5F8BFE7FBC2EAFEC2EAFEC0E8FCC0E8FCC0E8FCC0E8
       FCC0E8FCC1EAFDC2EBFEC3ECFFC4EDFF0000}
-    Visible = False
   end
   object head: TImage
     Left = 128
