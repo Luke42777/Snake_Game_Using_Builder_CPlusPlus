@@ -9,11 +9,18 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TForm1 *Form1;
+
+const int playGroundWidth = 450;
+const int playGroundHeight = 450;
+
 int xFruit = 0;
 int yFruit = 0;
 int score = 0;
 
+
+
 TImage* pTail[80];
+int tailElement = 0;// for pTail[tailElement]
 void createArrayOfTailsSetValues(); // prototype
 
 
@@ -51,8 +58,8 @@ void resetTimers()
  {
     //randomly choosing fruit place on the field
         randomize();
-        xFruit = random(400);
-        yFruit = random(400);
+        xFruit = random(playGroundWidth - 30);
+        yFruit = random(playGroundHeight - 30);
 
     //prevent placing fruit on middle of the game field where will be snake at the beginning of the game
         if((xFruit > 180 && xFruit < 220) && (yFruit > 180 && yFruit < 220) )
@@ -68,8 +75,8 @@ void resetTimers()
 {
         setFruitLocation();
         createArrayOfTailsSetValues();
-        Form1->head->Left = 200;
-        Form1->head->Top = 200;
+        Form1->head->Left = playGroundWidth / 2; //middle of play ground
+        Form1->head->Top = playGroundHeight / 2 ;
 
         score = 0;
 
@@ -87,6 +94,14 @@ void __fastcall TForm1::downTimer(TObject *Sender)
 {
 
     head->Top += 6;
+
+    if( pTail[tailElement]->Visible == true)  //to change place tail correctly if already exist(is visible)
+    {
+     pTail[tailElement]->Top = head->Top - head->Height - 2 ;
+     pTail[tailElement]->Left  = head->Left;
+
+
+    }
     if((head->Top + head->Height) >= playField->Height)
     {
       head->Top = 0;
@@ -97,17 +112,35 @@ void __fastcall TForm1::downTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
+       pTail[tailElement]->Visible = true;
 
-
+       pTail[tailElement]->Top = head->Top - head->Height - 2 ;
+       pTail[tailElement]->Left  = head->Left;
 
     }
     Form1->Label1->Caption = "Score: " + IntToStr(score);
+    pTail[tailElement]->Top += 6;
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
 
+
     head->Left -= 6;
+     if( pTail[tailElement]->Visible == true)  //to change place tail correctly if already exist(is visible)
+    {
+    pTail[tailElement]->Left = head->Left + head->Width + 2;
+    pTail[tailElement]->Top = head->Top;
+
+    }
+
+    if( pTail[tailElement]->Visible == true)
+    {
+    pTail[tailElement]->Top = head->Top;
+    pTail[tailElement]->Left = head->Left + head->Width + 2;
+
+    }
     if((head->Left) <= 0)
     {
       head->Left = playField->Width - 10;
@@ -115,19 +148,39 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
 
     if(isFruitBeingEaten() == true)
     {
+        pTail[tailElement]->Top = head->Top;
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
+
+       //show tail element and place it correctly
+       pTail[tailElement]->Visible = true;
+
+       pTail[tailElement]->Left = head->Left + head->Width + 2;
+       pTail[tailElement]->Top = head->Top;
 
 
 
     }
     Form1->Label1->Caption = "Score: " + IntToStr(score);
+    pTail[tailElement]->Left -= 6;
+
+
+
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
    head->Left += 6;
+
+   if( pTail[tailElement]->Visible == true)  //to change place tail correctly if already exist(is visible)
+    {
+      pTail[tailElement]->Left = head->Left - head->Width - 2;
+      pTail[tailElement]->Top  = head->Top;
+
+    }
+
    if((head->Left + head->Width) > playField->Width)
     {
       head->Left = 0;
@@ -137,31 +190,55 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
+        //show tail element and place it correctly
+       pTail[tailElement]->Visible = true;
+
+       pTail[tailElement]->Left = head->Left- head->Width - 2;
+       pTail[tailElement]->Top  = head->Top;
 
 
 
     }
     Form1->Label1->Caption = "Score: " + IntToStr(score);
+    pTail[tailElement]->Left += 6;
+
 
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::upTimer(TObject *Sender)
 {
      head->Top -= 6;
+
+     if( pTail[tailElement]->Visible == true)  //to change place tail correctly if already exist(is visible)
+    {
+         pTail[tailElement]->Top = head->Top + head->Height + 2;
+         pTail[tailElement]->Left  = head->Left;
+    }
+
+
+
    if(head->Top + 10  <= 0)
     {
-      head->Top = playField->Height - head->Height;
+      head->Top = playField->Height + head->Height + 2;
+      pTail[tailElement]->Left  = head->Left;
     }
       if(isFruitBeingEaten() == true)
     {
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
+        //show tail element and place it correctly
+       pTail[tailElement]->Visible = true;
 
-
+       pTail[tailElement]->Top = head->Top + head->Height + 2;
+       pTail[tailElement]->Left  = head->Left;
 
     }
     Form1->Label1->Caption = "Score: " + IntToStr(score);
+
+    pTail[tailElement]->Top -= 6; // fallow head
+
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -265,7 +342,6 @@ pTail[50] = Form1->Image50;
    pTail[i]->Transparent = true;
    pTail[i]->Picture->LoadFromFile("img/cialo.bmp");
    pTail[i]->Visible = false;
-
  }
 
 }
