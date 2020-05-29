@@ -12,6 +12,11 @@ TForm1 *Form1;
 int xFruit = 0;
 int yFruit = 0;
 int score = 0;
+
+TImage* pTail[80];
+void createArrayOfTailsSetValues(); // prototype
+
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
@@ -62,13 +67,14 @@ void resetTimers()
  void setGame()
 {
         setFruitLocation();
+        createArrayOfTailsSetValues();
         Form1->head->Left = 200;
         Form1->head->Top = 200;
 
         score = 0;
 
         //play intro sound
-        sndPlaySound("snd/intro.wav",SND_ASYNC);
+        //sndPlaySound("snd/intro.wav",SND_ASYNC);
         resetTimers();
         //initial label caption
         Form1->Label1->Caption = "Score: " + IntToStr(score);
@@ -199,4 +205,67 @@ void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
 
 }
 //---------------------------------------------------------------------------
+void  createArrayOfTailsSetValues()
+{
+pTail[0] = Form1->Image0;
+pTail[1] = Form1->Image1;
+pTail[2] = Form1->Image2;
+pTail[3] = Form1->Image3;
+pTail[4] = Form1->Image4;
+pTail[5] = Form1->Image5;
+pTail[6] = Form1->Image6;
+pTail[7] = Form1->Image7;
+pTail[8] = Form1->Image8;
+pTail[9] = Form1->Image9;
+pTail[10] = Form1->Image10;
+pTail[11] = Form1->Image11;
+pTail[12] = Form1->Image12;
+pTail[13] = Form1->Image13;
+pTail[14] = Form1->Image14;
+pTail[15] = Form1->Image15;
+pTail[16] = Form1->Image16;
+pTail[17] = Form1->Image17;
+pTail[18] = Form1->Image18;
+pTail[19] = Form1->Image19;
+pTail[20] = Form1->Image20;
+pTail[21] = Form1->Image21;
+pTail[22] = Form1->Image22;
+pTail[23] = Form1->Image23;
+pTail[24] = Form1->Image24;
+pTail[25] = Form1->Image25;
+pTail[26] = Form1->Image26;
+pTail[27] = Form1->Image27;
+pTail[28] = Form1->Image28;
+pTail[29] = Form1->Image29;
+pTail[30] = Form1->Image30;
+pTail[31] = Form1->Image31;
+pTail[32] = Form1->Image32;
+pTail[33] = Form1->Image33;
+pTail[34] = Form1->Image34;
+pTail[35] = Form1->Image35;
+pTail[36] = Form1->Image36;
+pTail[37] = Form1->Image37;
+pTail[38] = Form1->Image38;
+pTail[39] = Form1->Image39;
+pTail[40] = Form1->Image40;
+pTail[41] = Form1->Image41;
+pTail[42] = Form1->Image42;
+pTail[43] = Form1->Image43;
+pTail[44] = Form1->Image44;
+pTail[45] = Form1->Image45;
+pTail[46] = Form1->Image46;
+pTail[47] = Form1->Image47;
+pTail[48] = Form1->Image48;
+pTail[49] = Form1->Image49;
+pTail[50] = Form1->Image50;
 
+ for(int i = 0; i < 50 ; i++)
+ {
+   pTail[i]->AutoSize = true;
+   pTail[i]->Transparent = true;
+   pTail[i]->Picture->LoadFromFile("img/cialo.bmp");
+   pTail[i]->Visible = false;
+
+ }
+
+}
