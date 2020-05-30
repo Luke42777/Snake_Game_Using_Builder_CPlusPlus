@@ -25643,28 +25643,28 @@ object Form1: TForm1
   end
   object left: TTimer
     Enabled = False
-    Interval = 70
+    Interval = 200
     OnTimer = leftTimer
     Left = 8
     Top = 48
   end
   object right: TTimer
     Enabled = False
-    Interval = 70
+    Interval = 200
     OnTimer = rightTimer
     Left = 72
     Top = 48
   end
   object up: TTimer
     Enabled = False
-    Interval = 70
+    Interval = 200
     OnTimer = upTimer
     Left = 40
     Top = 8
   end
   object down: TTimer
     Enabled = False
-    Interval = 70
+    Interval = 300
     OnTimer = downTimer
     Left = 40
     Top = 88
