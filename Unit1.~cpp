@@ -5,16 +5,25 @@
 
 #include "Unit1.h"
 #include "mmsystem.h"
+#include <list>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TForm1 *Form1;
-struct TailPositions
+struct HeadPath
 {
- int x;
- int y;
+ int x,y;
+
+ HeadPath(int a, int b): x(a), y(b)
+ {
+
+ }
+
 };
 
+std::list<HeadPath> path;
+int numberElements = 0;
+int steps = 0;
 
 const int playGroundWidth = 450;
 const int playGroundHeight = 450;
@@ -23,16 +32,10 @@ int xFruit = 0;
 int yFruit = 0;
 int score = 0;
 
-int xToFollow = 0;
-int yToFollow = 0;
-
-int xPreviousHead;
-int yPreviousHead;
-
 
 TImage* pTail[80];
-int numberElements = 0;// for pTail[tailElement]
 void createArrayOfTailsSetValues(); // prototype
+
 
 
 //---------------------------------------------------------------------------
@@ -104,6 +107,7 @@ void resetTimers()
 
 void __fastcall TForm1::downTimer(TObject *Sender)
 {
+path.push_front(HeadPath(head->Left,head->Top));
 
 head->Top += 20;
 
@@ -118,38 +122,18 @@ head->Top += 20;
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
+
+       pTail[numberElements]->Left = path[path.size() - (numberElements + 1)].x;
+       pTail[numberElements]->Top  = path[path.size() - (numberElements + 1)].y;
+       pTail[numberElements]->Visible = true;
        numberElements++;
 
-       //placing tail elements
-       if( numberElements == 1)
-        {
-          pTail[0]->Left = xPreviousHead;
-          pTail[0]->Top  = yPreviousHead;
-          pTail[0]->Visible = true;
-        }
-       if( numberElements > 1)
-        {
-         for(int i = score - 1; i < numberElements; i++)
-          {
-            pTail[i]->Left =  pTail[i -1]->Top;
-            pTail[i]->Top  =  pTail[i-1]->Top;
-            pTail[0]->Visible = true;
-          }
-        }
 
     }// isFruitBeingEaten()
 
 
-      for(int i = 0; i < numberElements;i++)
-      {
-         pTail[i]->Top += 20;
-
-      }
-
     Label1->Caption = "Score: " + IntToStr(score);
 
-    xPreviousHead = head->Left;
-    yPreviousHead = head->Top;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
@@ -167,36 +151,10 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
        setFruitLocation();
        score++;
        numberElements++;
-
-         //placing tail elements
-       if( numberElements == 1)
-        {
-          pTail[0]->Left = xPreviousHead;
-          pTail[0]->Top  = yPreviousHead;
-          pTail[0]->Visible = true;
-        }
-       if( numberElements > 1)
-        {
-         for(int i = score - 1; i < numberElements; i++)
-          {
-            pTail[i]->Left =  pTail[i -1]->Top;
-            pTail[i]->Top  =  pTail[i-1]->Top;
-            pTail[0]->Visible = true;
-          }
-        }
-
-
-    }
-
-     for(int i = 0; i < numberElements;i++)
-      {
-         pTail[i]->Left -= 20;
-
-      }
+     }
 
     Label1->Caption = "Score: " + IntToStr(score);
-     xPreviousHead = head->Left;
-     yPreviousHead = head->Top;
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
@@ -214,35 +172,9 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
        score++;
        numberElements++;
 
-        //placing tail elements
-       if( numberElements == 1)
-        {
-          pTail[0]->Left = xPreviousHead;
-          pTail[0]->Top  = yPreviousHead;
-          pTail[0]->Visible = true;
-        }
-       if( numberElements > 1)
-        {
-         for(int i = score - 1; i < numberElements; i++)
-          {
-            pTail[i]->Left =  pTail[i -1]->Top;
-            pTail[i]->Top  =  pTail[i-1]->Top;
-            pTail[0]->Visible = true;
-          }
-        }
-
-
     }
-    for(int i = 0; i < numberElements;i++)
-      {
-         pTail[i]->Left += 20;
-
-      }
 
     Label1->Caption = "Score: " + IntToStr(score);
-
-    xPreviousHead = head->Left;
-    yPreviousHead = head->Top;
 
 }
 //---------------------------------------------------------------------------
@@ -264,34 +196,12 @@ void __fastcall TForm1::upTimer(TObject *Sender)
        score++;
        numberElements++;
 
-       //placing tail elements
-       if( numberElements == 1)
-        {
-          pTail[0]->Left = xPreviousHead;
-          pTail[0]->Top  = yPreviousHead;
-          pTail[0]->Visible = true;
-        }
-       if( numberElements > 1)
-        {
-         for(int i = score - 1; i < numberElements; i++)
-          {
-            pTail[i]->Left =  pTail[i - 1]->Top;
-            pTail[i]->Top  =  pTail[i- 1]->Top;
-            pTail[0]->Visible = true;
-          }
-        }
-
     }
 
-     for(int i = 0; i < numberElements;i++)
-      {
-         pTail[i]->Top -= 20;
-      }
 
 
     Label1->Caption = "Score: " + IntToStr(score);
-    xPreviousHead = head->Left;
-    yPreviousHead = head->Top;
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -389,14 +299,7 @@ pTail[48] = Form1->Image48;
 pTail[49] = Form1->Image49;
 pTail[50] = Form1->Image50;
 
- for(int i = 0; i < 50 ; i++)
- {
-   pTail[i]->AutoSize = true;
-   pTail[i]->Transparent = true;
-   pTail[i]->Picture->LoadFromFile("img/cialo.bmp");
-   pTail[i]->Visible = false;
 
- }
 
 }
 

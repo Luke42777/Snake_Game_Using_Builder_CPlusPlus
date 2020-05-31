@@ -5,11 +5,21 @@
 
 #include "Unit1.h"
 #include "mmsystem.h"
+#include <vector>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TForm1 *Form1;
+//////////////////////////////////////////////////////////////////////////////
+struct HeadPath
+{
+ int x,y;
 
+ HeadPath(int a, int b): x(a), y(b) {}
+};
+///////////////////////////////////////////////////////////////////////////////
+std::vector<HeadPath> path;
+int numberElements = 0;
 
 
 const int playGroundWidth = 450;
@@ -19,17 +29,10 @@ int xFruit = 0;
 int yFruit = 0;
 int score = 0;
 
-int xToFollow = 0;
-int yToFollow = 0;
-
-int xPreviousHead;
-int yPreviousHead;
-
 
 TImage* pTail[80];
-int numberElements = 0;// for pTail[tailElement]
 void createArrayOfTailsSetValues(); // prototype
-bool moveTailElements = true;
+
 
 
 //---------------------------------------------------------------------------
@@ -101,8 +104,9 @@ void resetTimers()
 
 void __fastcall TForm1::downTimer(TObject *Sender)
 {
+path.push_back(HeadPath(head->Left,head->Top));
 
-   head->Top += 20;
+head->Top += 20;
 
 
     if((head->Top + head->Height) >= playField->Height)
@@ -115,48 +119,25 @@ void __fastcall TForm1::downTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-       numberElements++;
 
-       //placing tail elements
-       if( numberElements == 1)
-        {
-          pTail[0]->Left = xPreviousHead;
-          pTail[0]->Top  = yPreviousHead;
-          pTail[0]->Visible = true;
-          moveTailElements = false;
-        }
-       if( numberElements > 1)
-        {
-         for(int i = score - 1; i < numberElements; i++)
-          {
-            pTail[i]->Left =  pTail[i -1]->Top;
-            pTail[i]->Top  =  pTail[i-1]->Top;
-            pTail[i]->Visible = true;
-          }
-         moveTailElements = false;
-        }
+         numberElements++;
+       pTail[numberElements - 1]->Visible = true;
+
+
 
     }// isFruitBeingEaten()
-
-    if(moveTailElements == true)
-      {
-        for(int i = 0; i < numberElements;i++)
-        {
-         pTail[i]->Top += 20;
-
-        }
-      }
-
-
+    for(int i = 0; i < numberElements; i++)
+    {
+      pTail[i]->Left = path[path.size() - numberElements].x;
+      pTail[i]->Top  = path[path.size() - numberElements].y;
+    }
     Label1->Caption = "Score: " + IntToStr(score);
 
-    xPreviousHead = head->Left;
-    yPreviousHead = head->Top;
-    moveTailElements = true;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
+    path.push_back(HeadPath(head->Left,head->Top));
     head->Left -= 20;
     if((head->Left) <= 0)
     {
@@ -169,48 +150,25 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-       numberElements++;
+         numberElements++;
+       pTail[numberElements - 1]->Visible = true;
 
-         //placing tail elements
-       if( numberElements == 1)
-        {
-          pTail[0]->Left = xPreviousHead;
-          pTail[0]->Top  = yPreviousHead;
-          pTail[0]->Visible = true;
-          moveTailElements = false;
-        }
-       if( numberElements > 1)
-        {
-         for(int i = score - 1; i < numberElements; i++)
-          {
-            pTail[i]->Left =  pTail[i -1]->Top;
-            pTail[i]->Top  =  pTail[i-1]->Top;
-            pTail[i]->Visible = true;
-          }
-         moveTailElements = false;
-        }
+     }
 
-
+       for(int i = 0; i < numberElements; i++)
+    {
+    pTail[i]->Left = path[path.size() - numberElements].x;
+    pTail[i]->Top  = path[path.size() - numberElements].y;
     }
-      if(moveTailElements == true)
-      {
-        for(int i = 0; i < numberElements;i++)
-        {
-         pTail[i]->Left -= 20;
-
-        }
-      }
 
     Label1->Caption = "Score: " + IntToStr(score);
-     xPreviousHead = head->Left;
-     yPreviousHead = head->Top;
-      moveTailElements = true;
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
-
-      head->Left += 20;
+   path.push_back(HeadPath(head->Left,head->Top));
+   head->Left += 20;
    if((head->Left + head->Width) > playField->Width)
     {
       head->Left = 0;
@@ -220,48 +178,24 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-       numberElements++;
 
-        //placing tail elements
-       if( numberElements == 1)
-        {
-          pTail[0]->Left = xPreviousHead;
-          pTail[0]->Top  = yPreviousHead;
-          pTail[0]->Visible = true;
-          moveTailElements = false;
-        }
-       if( numberElements > 1)
-        {
-         for(int i = score - 1; i < numberElements; i++)
-          {
-            pTail[i]->Left =  pTail[i -1]->Top;
-            pTail[i]->Top  =  pTail[i-1]->Top;
-            pTail[i]->Visible = true;
-          }
-          moveTailElements = false;
-        }
+        numberElements++;
+        pTail[numberElements - 1]->Visible = true;
 
 
     }
-     if(moveTailElements == true)
-      {
-        for(int i = 0; i < numberElements;i++)
-        {
-         pTail[i]->Left += 20;
-        }
-      }
-
+     for(int i = 0; i < numberElements; i++)
+    {
+    pTail[i]->Left = path[path.size() - numberElements].x;
+    pTail[i]->Top  = path[path.size() - numberElements].y;
+    }
     Label1->Caption = "Score: " + IntToStr(score);
-
-    xPreviousHead = head->Left;
-    yPreviousHead = head->Top;
-     moveTailElements = true;
 
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::upTimer(TObject *Sender)
 {
-
+    path.push_back(HeadPath(head->Left,head->Top));
     head->Top -= 20;
 
    if(head->Top + 10  <= 0)
@@ -275,43 +209,21 @@ void __fastcall TForm1::upTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-       numberElements++;
 
-       //placing tail elements
-       if( numberElements == 1)
-        {
-          pTail[0]->Left = xPreviousHead;
-          pTail[0]->Top  = yPreviousHead;
-          pTail[0]->Visible = true;
-          moveTailElements = false;
-        }
-       if( numberElements > 1)
-        {
-         for(int i = score - 1; i < numberElements; i++)
-          {
-            pTail[i]->Left =  pTail[i - 1]->Top;
-            pTail[i]->Top  =  pTail[i- 1]->Top;
-            pTail[i]->Visible = true;
-          }
-           moveTailElements = false;
-        }
+        numberElements++;
+       pTail[numberElements - 1]->Visible = true;
+
 
     }
 
-     if(moveTailElements == true)
-      {
-        for(int i = 0; i < numberElements;i++)
-        {
-         pTail[i]->Top -= 20;
-
-        }
-      }
-
+     for(int i = 0; i < numberElements; i++)
+    {
+    pTail[i]->Left = path[path.size() - numberElements].x;
+    pTail[i]->Top  = path[path.size() - numberElements].y;
+    }
 
     Label1->Caption = "Score: " + IntToStr(score);
-    xPreviousHead = head->Left;
-    yPreviousHead = head->Top;
-    moveTailElements = true;
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -408,7 +320,6 @@ pTail[47] = Form1->Image47;
 pTail[48] = Form1->Image48;
 pTail[49] = Form1->Image49;
 pTail[50] = Form1->Image50;
-
 
 
 }
