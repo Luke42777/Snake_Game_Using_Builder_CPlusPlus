@@ -15,7 +15,6 @@ struct TailPositions
  int y;
 };
 
-TailPositions tailPos[80];
 
 const int playGroundWidth = 450;
 const int playGroundHeight = 450;
@@ -114,27 +113,38 @@ head->Top += 20;
       head->Top = 0;
     }
 
-     if(isFruitBeingEaten() == true)
+    if(isFruitBeingEaten() == true)
     {
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
        numberElements++;
 
-    }
-    tailPos[0].x = xPreviousHead;
-     tailPos[0].y = yPreviousHead;
-        for(int i = 0; i < numberElements ;i++)
+       //placing tail elements
+       if( numberElements == 1)
+        {
+          pTail[0]->Left = xPreviousHead;
+          pTail[0]->Top  = yPreviousHead;
+          pTail[0]->Visible = true;
+        }
+       if( numberElements > 1)
+        {
+         for(int i = score - 1; i < numberElements; i++)
+          {
+            pTail[i]->Left =  pTail[i -1]->Top;
+            pTail[i]->Top  =  pTail[i-1]->Top;
+            pTail[0]->Visible = true;
+          }
+        }
+
+    }// isFruitBeingEaten()
+
+
+      for(int i = 0; i < numberElements;i++)
       {
-         pTail[numberElements]->Top   =  tailPos[numberElements - 1].y;
-         pTail[numberElements]->Left  =  tailPos[numberElements - 1].x;
-         pTail[numberElements]->Visible = true;
-         pTail[numberElements]->Top += 20;
+         pTail[i]->Top += 20;
+
       }
-
-
-
-
 
     Label1->Caption = "Score: " + IntToStr(score);
 
@@ -144,7 +154,7 @@ head->Top += 20;
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
-
+     head->Left -= 20;
 
     if((head->Left) <= 0)
     {
@@ -157,21 +167,33 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-
        numberElements++;
 
-    }
-     head->Left -= 20;
-     tailPos[0].x = xPreviousHead;
-     tailPos[0].y = yPreviousHead;
-        for(int i = 0; i < numberElements ;i++)
-      {
-         pTail[numberElements]->Top   =  tailPos[numberElements - 1].y;
-         pTail[numberElements]->Left  =  tailPos[numberElements - 1].x;
-         pTail[numberElements]->Visible = true;
-         pTail[numberElements]->Left -= 20;
-      }
+         //placing tail elements
+       if( numberElements == 1)
+        {
+          pTail[0]->Left = xPreviousHead;
+          pTail[0]->Top  = yPreviousHead;
+          pTail[0]->Visible = true;
+        }
+       if( numberElements > 1)
+        {
+         for(int i = score - 1; i < numberElements; i++)
+          {
+            pTail[i]->Left =  pTail[i -1]->Top;
+            pTail[i]->Top  =  pTail[i-1]->Top;
+            pTail[0]->Visible = true;
+          }
+        }
 
+
+    }
+
+     for(int i = 0; i < numberElements;i++)
+      {
+         pTail[i]->Left -= 20;
+
+      }
 
     Label1->Caption = "Score: " + IntToStr(score);
      xPreviousHead = head->Left;
@@ -180,7 +202,7 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
-
+     head->Left += 20;
 
    if((head->Left + head->Width) > playField->Width)
     {
@@ -191,21 +213,33 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-
        numberElements++;
 
-    }
-     head->Left += 20;
-     tailPos[0].x = xPreviousHead;
-     tailPos[0].y = yPreviousHead;
+        //placing tail elements
+       if( numberElements == 1)
+        {
+          pTail[0]->Left = xPreviousHead;
+          pTail[0]->Top  = yPreviousHead;
+          pTail[0]->Visible = true;
+        }
+       if( numberElements > 1)
+        {
+         for(int i = score - 1; i < numberElements; i++)
+          {
+            pTail[i]->Left =  pTail[i -1]->Top;
+            pTail[i]->Top  =  pTail[i-1]->Top;
+            pTail[0]->Visible = true;
+          }
+        }
 
-        for(int i = 0; i < numberElements ;i++)
+
+    }
+    for(int i = 0; i < numberElements;i++)
       {
-         pTail[numberElements]->Top   =  tailPos[numberElements - 1].y;
-         pTail[numberElements]->Left  =  tailPos[numberElements - 1].x;
-         pTail[numberElements]->Visible = true;
-         pTail[numberElements]->Left += 20;
+         pTail[i]->Left += 20;
+
       }
+
     Label1->Caption = "Score: " + IntToStr(score);
 
     xPreviousHead = head->Left;
@@ -228,26 +262,36 @@ void __fastcall TForm1::upTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-
        numberElements++;
 
+       //placing tail elements
+       if( numberElements == 1)
+        {
+          pTail[0]->Left = xPreviousHead;
+          pTail[0]->Top  = yPreviousHead;
+          pTail[0]->Visible = true;
+        }
+       if( numberElements > 1)
+        {
+         for(int i = score - 1; i < numberElements; i++)
+          {
+            pTail[i]->Left =  pTail[i -1]->Top;
+            pTail[i]->Top  =  pTail[i-1]->Top;
+            pTail[0]->Visible = true;
+          }
+        }
+
     }
-    tailPos[0].x = xPreviousHead;
-   tailPos[0].y = yPreviousHead;
-        for(int i = 0; i < numberElements ;i++)
+
+     for(int i = 0; i < numberElements;i++)
       {
-         pTail[numberElements]->Top   =  tailPos[numberElements - 1].y;
-         pTail[numberElements]->Left  =  tailPos[numberElements - 1].x;
-         pTail[numberElements]->Visible = true;
-         pTail[numberElements]->Top -= 20;
+         pTail[i]->Top -= 20;
       }
-
-
 
 
     Label1->Caption = "Score: " + IntToStr(score);
      xPreviousHead = head->Left;
-    yPreviousHead = head->Top;
+     yPreviousHead = head->Top;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
