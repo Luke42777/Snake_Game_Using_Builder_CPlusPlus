@@ -154,8 +154,7 @@ head->Top += 20;
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
-     head->Left -= 20;
-
+    head->Left -= 20;
     if((head->Left) <= 0)
     {
       head->Left = playField->Width - 10;
@@ -202,8 +201,8 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
-     head->Left += 20;
 
+      head->Left += 20;
    if((head->Left + head->Width) > playField->Width)
     {
       head->Left = 0;
@@ -249,7 +248,8 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::upTimer(TObject *Sender)
 {
-   head->Top -= 20;
+
+    head->Top -= 20;
 
    if(head->Top + 10  <= 0)
     {
@@ -275,8 +275,8 @@ void __fastcall TForm1::upTimer(TObject *Sender)
         {
          for(int i = score - 1; i < numberElements; i++)
           {
-            pTail[i]->Left =  pTail[i -1]->Top;
-            pTail[i]->Top  =  pTail[i-1]->Top;
+            pTail[i]->Left =  pTail[i - 1]->Top;
+            pTail[i]->Top  =  pTail[i- 1]->Top;
             pTail[0]->Visible = true;
           }
         }
@@ -290,8 +290,8 @@ void __fastcall TForm1::upTimer(TObject *Sender)
 
 
     Label1->Caption = "Score: " + IntToStr(score);
-     xPreviousHead = head->Left;
-     yPreviousHead = head->Top;
+    xPreviousHead = head->Left;
+    yPreviousHead = head->Top;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
