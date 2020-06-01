@@ -5,8 +5,6 @@ object Form1: TForm1
   Height = 542
   Caption = 'Snake v.1.0.'
   Color = clBtnFace
-  UseDockManager = True
-  DockSite = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

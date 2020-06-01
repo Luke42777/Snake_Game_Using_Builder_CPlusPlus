@@ -19,7 +19,7 @@ struct HeadPath
 };
 ///////////////////////////////////////////////////////////////////////////////
 std::vector<HeadPath> path;
-int numberElements = 0;
+
 
 
 const int playGroundWidth = 450;
@@ -58,10 +58,10 @@ bool isFruitBeingEaten()
 //-----------------------------------------------------------------------
 void resetTimers()
  {
-    Form1->left->Enabled = false;
+    Form1->left->Enabled  = false;
     Form1->right->Enabled = false;
-    Form1->up->Enabled = false;
-    Form1->down->Enabled = false;
+    Form1->up->Enabled    = false;
+    Form1->down->Enabled  = false;
 
  }
  //----------------------------------------------------------------------------
@@ -120,16 +120,16 @@ head->Top += 20;
        setFruitLocation();
        score++;
 
-         numberElements++;
-       pTail[numberElements - 1]->Visible = true;
+       pTail[score - 1]->Visible = true;
 
 
 
     }// isFruitBeingEaten()
-    for(int i = 0; i < numberElements; i++)
+
+    for(int i = 0; i < score; i++)
     {
-      pTail[i]->Left = path[path.size() - numberElements].x;
-      pTail[i]->Top  = path[path.size() - numberElements].y;
+       pTail[i]->Left = path[path.size() - (i + 1)].x;
+        pTail[i]->Top  = path[path.size() - (i + 1)].y;
     }
     Label1->Caption = "Score: " + IntToStr(score);
 
@@ -150,15 +150,15 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-         numberElements++;
-       pTail[numberElements - 1]->Visible = true;
+        
+       pTail[score - 1]->Visible = true;
 
      }
 
-       for(int i = 0; i < numberElements; i++)
+       for(int i = 0; i < score; i++)
     {
-    pTail[i]->Left = path[path.size() - numberElements].x;
-    pTail[i]->Top  = path[path.size() - numberElements].y;
+        pTail[i]->Left = path[path.size() - (i + 1)].x;
+        pTail[i]->Top  = path[path.size() - (i + 1)].y;
     }
 
     Label1->Caption = "Score: " + IntToStr(score);
@@ -177,17 +177,17 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
     {
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
-       score++;
+     
 
-        numberElements++;
-        pTail[numberElements - 1]->Visible = true;
+        score++;
+        pTail[score - 1]->Visible = true;
 
 
     }
-     for(int i = 0; i < numberElements; i++)
+     for(int i = 0; i < score; i++)
     {
-    pTail[i]->Left = path[path.size() - numberElements].x;
-    pTail[i]->Top  = path[path.size() - numberElements].y;
+      pTail[i]->Left = path[path.size() - (i + 1)].x;
+      pTail[i]->Top  = path[path.size() - (i + 1)].y;
     }
     Label1->Caption = "Score: " + IntToStr(score);
 
@@ -210,16 +210,16 @@ void __fastcall TForm1::upTimer(TObject *Sender)
        setFruitLocation();
        score++;
 
-        numberElements++;
-       pTail[numberElements - 1]->Visible = true;
+       
+       pTail[score - 1]->Visible = true;
 
 
     }
 
-     for(int i = 0; i < numberElements; i++)
+     for(int i = 0; i < score; i++)
     {
-    pTail[i]->Left = path[path.size() - numberElements].x;
-    pTail[i]->Top  = path[path.size() - numberElements].y;
+      pTail[i]->Left = path[path.size() - (i + 1)].x;
+      pTail[i]->Top  = path[path.size() - (i + 1)].y;
     }
 
     Label1->Caption = "Score: " + IntToStr(score);

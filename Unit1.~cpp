@@ -5,25 +5,22 @@
 
 #include "Unit1.h"
 #include "mmsystem.h"
-#include <list>
+#include <vector>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TForm1 *Form1;
+//////////////////////////////////////////////////////////////////////////////
 struct HeadPath
 {
  int x,y;
 
- HeadPath(int a, int b): x(a), y(b)
- {
-
- }
-
+ HeadPath(int a, int b): x(a), y(b) {}
 };
+///////////////////////////////////////////////////////////////////////////////
+std::vector<HeadPath> path;
 
-std::list<HeadPath> path;
-int numberElements = 0;
-int steps = 0;
+
 
 const int playGroundWidth = 450;
 const int playGroundHeight = 450;
@@ -61,10 +58,10 @@ bool isFruitBeingEaten()
 //-----------------------------------------------------------------------
 void resetTimers()
  {
-    Form1->left->Enabled = false;
+    Form1->left->Enabled  = false;
     Form1->right->Enabled = false;
-    Form1->up->Enabled = false;
-    Form1->down->Enabled = false;
+    Form1->up->Enabled    = false;
+    Form1->down->Enabled  = false;
 
  }
  //----------------------------------------------------------------------------
@@ -107,7 +104,7 @@ void resetTimers()
 
 void __fastcall TForm1::downTimer(TObject *Sender)
 {
-path.push_front(HeadPath(head->Left,head->Top));
+path.push_back(HeadPath(head->Left,head->Top));
 
 head->Top += 20;
 
@@ -123,21 +120,24 @@ head->Top += 20;
        setFruitLocation();
        score++;
 
-       pTail[numberElements]->Left = path[path.size() - (numberElements + 1)].x;
-       pTail[numberElements]->Top  = path[path.size() - (numberElements + 1)].y;
-       pTail[numberElements]->Visible = true;
-       numberElements++;
+       pTail[score - 1]->Visible = true;
+
 
 
     }// isFruitBeingEaten()
 
-
+    for(int i = 0; i < score; i++)
+    {
+       pTail[i]->Left = path[path.size() - (i + 1)].x;
+        pTail[i]->Top  = path[path.size() - (i + 1)].y;
+    }
     Label1->Caption = "Score: " + IntToStr(score);
 
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
+    path.push_back(HeadPath(head->Left,head->Top));
     head->Left -= 20;
     if((head->Left) <= 0)
     {
@@ -150,8 +150,16 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-       numberElements++;
+        
+       pTail[score - 1]->Visible = true;
+
      }
+
+       for(int i = 0; i < score; i++)
+    {
+        pTail[i]->Left = path[path.size() - (i + 1)].x;
+        pTail[i]->Top  = path[path.size() - (i + 1)].y;
+    }
 
     Label1->Caption = "Score: " + IntToStr(score);
 
@@ -159,8 +167,8 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
-
-      head->Left += 20;
+   path.push_back(HeadPath(head->Left,head->Top));
+   head->Left += 20;
    if((head->Left + head->Width) > playField->Width)
     {
       head->Left = 0;
@@ -169,18 +177,25 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
     {
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
-       score++;
-       numberElements++;
+     
+
+        score++;
+        pTail[score - 1]->Visible = true;
+
 
     }
-
+     for(int i = 0; i < score; i++)
+    {
+      pTail[i]->Left = path[path.size() - (i + 1)].x;
+      pTail[i]->Top  = path[path.size() - (i + 1)].y;
+    }
     Label1->Caption = "Score: " + IntToStr(score);
 
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::upTimer(TObject *Sender)
 {
-
+    path.push_back(HeadPath(head->Left,head->Top));
     head->Top -= 20;
 
    if(head->Top + 10  <= 0)
@@ -194,11 +209,18 @@ void __fastcall TForm1::upTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-       numberElements++;
+
+       
+       pTail[score - 1]->Visible = true;
+
 
     }
 
-
+     for(int i = 0; i < score; i++)
+    {
+      pTail[i]->Left = path[path.size() - (i + 1)].x;
+      pTail[i]->Top  = path[path.size() - (i + 1)].y;
+    }
 
     Label1->Caption = "Score: " + IntToStr(score);
 
@@ -298,7 +320,6 @@ pTail[47] = Form1->Image47;
 pTail[48] = Form1->Image48;
 pTail[49] = Form1->Image49;
 pTail[50] = Form1->Image50;
-
 
 
 }
