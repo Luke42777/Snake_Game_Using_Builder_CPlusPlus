@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "Unit1.h"
+#include "Unit2.h"
 #include "mmsystem.h"
 #include <vector>
 //---------------------------------------------------------------------------
@@ -62,9 +63,28 @@ void __fastcall TForm1::downTimer(TObject *Sender)
     for(int i = 0; i < score; i++)
     {
        pTail[i]->Left = path[path.size() - (i + 1)].x;
-       pTail[i]->Top  = path[path.size() - (i + 1)].y;
+       pTail[i]->Top  = path[path.size() - (i + 1)].y - 5; // (- 5) to make clearance between objects
     }
     Label1->Caption = "Score: " + IntToStr(score);
+
+    //game over
+     if(isGameOver())
+    {
+       resetTimers();
+       sndPlaySound("snd/koniec.wav",SND_ASYNC);
+       path.clear(); //empty vector
+
+       if(Application->MessageBox("would you like to play again?", "Confirm",
+       MB_YESNO | MB_ICONQUESTION) == IDYES)
+        {
+          setGame();
+        }
+
+       else
+        {
+          Application->Terminate();
+        }
+    }
 
 }
 //---------------------------------------------------------------------------
@@ -87,12 +107,32 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
 
        for(int i = 0; i < score; i++)
     {
-        pTail[i]->Left = path[path.size() - (i + 1)].x;
+        pTail[i]->Left = path[path.size() - (i + 1)].x + 5;
         pTail[i]->Top  = path[path.size() - (i + 1)].y;
     }
 
     Label1->Caption = "Score: " + IntToStr(score);
+
+    //game over
+    if(isGameOver())
+    {
+       resetTimers();
+       sndPlaySound("snd/koniec.wav",SND_ASYNC);
+       path.clear(); //empty vector
+
+       if(Application->MessageBox("would you like to play again?", "Confirm",
+       MB_YESNO | MB_ICONQUESTION) == IDYES)
+        {
+          setGame();
+        }
+
+       else
+        {
+          Application->Terminate();
+        }
+    }
 }
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
@@ -112,10 +152,29 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
     }
      for(int i = 0; i < score; i++)
     {
-      pTail[i]->Left = path[path.size() - (i + 1)].x;
+      pTail[i]->Left = path[path.size() - (i + 1)].x - 5;
       pTail[i]->Top  = path[path.size() - (i + 1)].y;
     }
     Label1->Caption = "Score: " + IntToStr(score);
+
+    //game over
+    if(isGameOver())
+    {
+       resetTimers();
+       sndPlaySound("snd/koniec.wav",SND_ASYNC);
+       path.clear(); //clear all elemnts of vector
+
+       if(Application->MessageBox("would you like to play again?", "Confirm",
+       MB_YESNO | MB_ICONQUESTION) == IDYES)
+        {
+          setGame();
+        }
+
+       else
+        {
+          Application->Terminate();
+        }
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::upTimer(TObject *Sender)
@@ -126,7 +185,6 @@ void __fastcall TForm1::upTimer(TObject *Sender)
    if(head->Top + 10  <= 0)
     {
       head->Top = playField->Height - head->Height - 5;
-
     }
 
    if(isFruitBeingEaten() == true)
@@ -140,10 +198,29 @@ void __fastcall TForm1::upTimer(TObject *Sender)
      for(int i = 0; i < score; i++)
     {
       pTail[i]->Left = path[path.size() - (i + 1)].x;
-      pTail[i]->Top  = path[path.size() - (i + 1)].y;
+      pTail[i]->Top  = path[path.size() - (i + 1)].y + 5;
     }
 
     Label1->Caption = "Score: " + IntToStr(score);
+
+    //game over
+    if(isGameOver())
+    {
+       resetTimers();
+       sndPlaySound("snd/koniec.wav",SND_ASYNC);
+       path.clear();
+
+       if(Application->MessageBox("Would you like to play again?", "Confirm",
+       MB_YESNO | MB_ICONQUESTION) == IDYES)
+        {
+          setGame();
+        }
+
+       else
+        {
+          Application->Terminate();
+        }
+    }
 
 }
 //---------------------------------------------------------------------------
@@ -207,13 +284,20 @@ void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
 //******************************************************************************
 bool isGameOver()
 {
+       for(int i = 0; i < score;i++)
+       {
+        if( Form1->head->Left + Form1->head->Width - 11  > pTail[i]->Left
+            && Form1->head->Left +11  < pTail[i]->Left + pTail[i]->Width
+            && Form1->head->Top + Form1->head->Height  -11   > pTail[i]->Top
+            && Form1->head->Top + 11  < pTail[i]->Top + pTail[i]->Height)
+          {
+             return true;
+          }
+
+        }//for
 
 
-
-
-
-
-
+            return false;
 
 }
 //******************************************************************************
@@ -249,9 +333,13 @@ void resetTimers()
         createArrayOfTailsSetValues();
         Form1->head->Left = playGroundWidth / 2; //middle of play ground
         Form1->head->Top = playGroundHeight / 2 ;
+
+        //make all tail elements unvisible if there is second or more game
+        for(int i = 0 ; i < score;i++)
+        {
+           pTail[i]->Visible = false;
+        }
         score = 0;
-
-
         sndPlaySound("snd/intro.wav",SND_ASYNC); //play intro sound
         resetTimers();
 
@@ -315,4 +403,16 @@ pTail[48] = Form1->Image48;
 pTail[49] = Form1->Image49;
 pTail[50] = Form1->Image50;
 }
+
+void __fastcall TForm1::QR1Click(TObject *Sender)
+{
+        Form2->ShowModal();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::VisitprojectGitHubrepository1Click(TObject *Sender)
+{
+  ShellExecute(NULL,"open"," https://github.com/Luke42777/Snake_Game_Using_Builder_CPlusPlus.git",NULL,NULL,SW_SHOWNORMAL);
+}
+//---------------------------------------------------------------------------
 

@@ -1,15 +1,16 @@
 object Form1: TForm1
-  Left = 192
+  Left = 193
   Top = 125
-  Width = 648
-  Height = 542
-  Caption = 'Snake v.1.0.'
+  Width = 467
+  Height = 582
+  Caption = 'Snake v 1.0.'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  Menu = MainMenu1
   OldCreateOrder = False
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
@@ -25666,5 +25667,20 @@ object Form1: TForm1
     OnTimer = downTimer
     Left = 40
     Top = 88
+  end
+  object MainMenu1: TMainMenu
+    Left = 128
+    Top = 24
+    object Gameinfo1: TMenuItem
+      Caption = 'Game info'
+      object QR1: TMenuItem
+        Caption = 'QR code to GitHub'
+        OnClick = QR1Click
+      end
+      object VisitprojectGitHubrepository1: TMenuItem
+        Caption = 'Visit project GitHub  repository'
+        OnClick = VisitprojectGitHubrepository1Click
+      end
+    end
   end
 end

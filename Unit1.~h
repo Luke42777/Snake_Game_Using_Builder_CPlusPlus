@@ -9,6 +9,7 @@
 #include <Forms.hpp>
 #include <ExtCtrls.hpp>
 #include <Graphics.hpp>
+#include <Menus.hpp>
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -72,6 +73,10 @@ __published:	// IDE-managed Components
         TImage *Image49;
         TImage *Image50;
         TImage *Image0;
+        TMainMenu *MainMenu1;
+        TMenuItem *Gameinfo1;
+        TMenuItem *QR1;
+        TMenuItem *VisitprojectGitHubrepository1;
         void __fastcall downTimer(TObject *Sender);
         void __fastcall leftTimer(TObject *Sender);
         void __fastcall rightTimer(TObject *Sender);
@@ -79,6 +84,9 @@ __published:	// IDE-managed Components
         void __fastcall FormCreate(TObject *Sender);
         void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
+        void __fastcall QR1Click(TObject *Sender);
+        void __fastcall VisitprojectGitHubrepository1Click(
+          TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
