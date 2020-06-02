@@ -11,103 +11,40 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 //////////////////////////////////////////////////////////////////////////////
-struct HeadPath
+struct TheadPath
 {
  int x,y;
 
- HeadPath(int a, int b): x(a), y(b) {}
+ TheadPath(int a, int b): x(a), y(b) {}
 };
 ///////////////////////////////////////////////////////////////////////////////
-std::vector<HeadPath> path;
-
-
+std::vector<TheadPath> path;
+TImage* pTail[80]; // array of pointers to the TImage objects(our tails)
 
 const int playGroundWidth = 450;
 const int playGroundHeight = 450;
-
 int xFruit = 0;
 int yFruit = 0;
 int score = 0;
 
-
-TImage* pTail[80];
-void createArrayOfTailsSetValues(); // prototype
-
-
+bool isFruitBeingEaten();
+bool isGameOver();
+void setFruitLocation();
+void resetTimers();
+void setGame();
+void createArrayOfTailsSetValues();
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
 {
-}
-//---------------------------------------------------------------------------
-bool isFruitBeingEaten()
- {
-     if( Form1->head->Left + Form1->head->Width - 5 > Form1->fruit->Left
-       && Form1->head->Left + 5  < Form1->fruit->Left + Form1->fruit->Width
-       && Form1->head->Top + Form1->head->Height  - 5   > Form1->fruit->Top
-       && Form1->head->Top + 5  < Form1->fruit->Top + Form1->fruit->Height)
-        {
-           return true;
-        }
-      else
-        {
-           return false;
-        }
- }
-//-----------------------------------------------------------------------
-void resetTimers()
- {
-    Form1->left->Enabled  = false;
-    Form1->right->Enabled = false;
-    Form1->up->Enabled    = false;
-    Form1->down->Enabled  = false;
-
- }
- //----------------------------------------------------------------------------
- void setFruitLocation()
- {
-    //randomly choosing fruit place on the field
-        randomize();
-        xFruit = random(playGroundWidth - 30);
-        yFruit = random(playGroundHeight - 30);
-
-    //prevent placing fruit on middle of the game field where will be snake at the beginning of the game
-        if((xFruit > 180 && xFruit < 220) && (yFruit > 180 && yFruit < 220) )
-          {
-                xFruit == 100;
-          }
-    //locating fruit on the field
-        Form1->fruit->Left = xFruit;
-        Form1->fruit->Top =  yFruit;
- }
-//---------------------------------------------------------------------------
- void setGame()
-{
-        setFruitLocation();
-        createArrayOfTailsSetValues();
-
-        Form1->head->Left = playGroundWidth / 2; //middle of play ground
-        Form1->head->Top = playGroundHeight / 2 ;
-
-        score = 0;
-
-        //play intro sound
-        //sndPlaySound("snd/intro.wav",SND_ASYNC);
-        resetTimers();
-        //initial label caption
-        Form1->Label1->Caption = "Score: " + IntToStr(score);
-
 
 }
-//---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------
 void __fastcall TForm1::downTimer(TObject *Sender)
 {
-path.push_back(HeadPath(head->Left,head->Top));
-
-head->Top += 20;
-
+  path.push_back(TheadPath(head->Left,head->Top));
+  head->Top += 20;
 
     if((head->Top + head->Height) >= playField->Height)
     {
@@ -119,17 +56,13 @@ head->Top += 20;
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-
        pTail[score - 1]->Visible = true;
-
-
-
     }// isFruitBeingEaten()
 
     for(int i = 0; i < score; i++)
     {
        pTail[i]->Left = path[path.size() - (i + 1)].x;
-        pTail[i]->Top  = path[path.size() - (i + 1)].y;
+       pTail[i]->Top  = path[path.size() - (i + 1)].y;
     }
     Label1->Caption = "Score: " + IntToStr(score);
 
@@ -137,22 +70,19 @@ head->Top += 20;
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
-    path.push_back(HeadPath(head->Left,head->Top));
+    path.push_back(TheadPath(head->Left,head->Top));
     head->Left -= 20;
-    if((head->Left) <= 0)
+    if((head->Left) < 0)
     {
-      head->Left = playField->Width - 10;
+      head->Left = playField->Width - head->Width;
     }
 
     if(isFruitBeingEaten() == true)
     {
-
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-        
        pTail[score - 1]->Visible = true;
-
      }
 
        for(int i = 0; i < score; i++)
@@ -162,27 +92,23 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
     }
 
     Label1->Caption = "Score: " + IntToStr(score);
-
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
-   path.push_back(HeadPath(head->Left,head->Top));
+   path.push_back(TheadPath(head->Left,head->Top));
    head->Left += 20;
    if((head->Left + head->Width) > playField->Width)
     {
       head->Left = 0;
     }
+
       if(isFruitBeingEaten() == true)
     {
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
-     
-
-        score++;
-        pTail[score - 1]->Visible = true;
-
-
+       score++;
+       pTail[score - 1]->Visible = true;
     }
      for(int i = 0; i < score; i++)
     {
@@ -190,17 +116,16 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
       pTail[i]->Top  = path[path.size() - (i + 1)].y;
     }
     Label1->Caption = "Score: " + IntToStr(score);
-
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::upTimer(TObject *Sender)
 {
-    path.push_back(HeadPath(head->Left,head->Top));
+    path.push_back(TheadPath(head->Left,head->Top));
     head->Top -= 20;
 
    if(head->Top + 10  <= 0)
     {
-      head->Top = playField->Height + head->Height + 2;
+      head->Top = playField->Height - head->Height - 5;
 
     }
 
@@ -209,11 +134,7 @@ void __fastcall TForm1::upTimer(TObject *Sender)
        sndPlaySound("snd/eating.wav",SND_ASYNC);
        setFruitLocation();
        score++;
-
-       
        pTail[score - 1]->Visible = true;
-
-
     }
 
      for(int i = 0; i < score; i++)
@@ -264,9 +185,82 @@ void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
        right->Enabled = true;
  }
 
+}
+//***************************************************************************
+//***************************************************************************
+//**************************GLOBAL FUNCTIONS*********************************
+//***************************************************************************
+ bool isFruitBeingEaten()
+ {
+     if( Form1->head->Left + Form1->head->Width - 5 > Form1->fruit->Left
+       && Form1->head->Left + 5  < Form1->fruit->Left + Form1->fruit->Width
+       && Form1->head->Top + Form1->head->Height  - 5   > Form1->fruit->Top
+       && Form1->head->Top + 5  < Form1->fruit->Top + Form1->fruit->Height)
+        {
+           return true;
+        }
+      else
+        {
+           return false;
+        }
+ }
+//******************************************************************************
+bool isGameOver()
+{
+
+
+
+
+
+
+
 
 }
-//---------------------------------------------------------------------------
+//******************************************************************************
+  void setFruitLocation()
+ {
+    //randomly choosing fruit place on the field
+        randomize();
+        xFruit = random(playGroundWidth - 30);
+        yFruit = random(playGroundHeight - 30);
+
+    //prevent placing fruit on middle of the game field where will be snake at the beginning of the game
+        if((xFruit > 180 && xFruit < 220) && (yFruit > 180 && yFruit < 220) )
+          {
+                xFruit == 100;
+          }
+    //locating fruit on the field
+        Form1->fruit->Left = xFruit;
+        Form1->fruit->Top =  yFruit;
+ }
+//****************************************************************************
+void resetTimers()
+ {
+    Form1->left->Enabled  = false;
+    Form1->right->Enabled = false;
+    Form1->up->Enabled    = false;
+    Form1->down->Enabled  = false;
+ }
+ //*****************************************************************************
+
+ void setGame()
+{
+        setFruitLocation();
+        createArrayOfTailsSetValues();
+        Form1->head->Left = playGroundWidth / 2; //middle of play ground
+        Form1->head->Top = playGroundHeight / 2 ;
+        score = 0;
+
+
+        sndPlaySound("snd/intro.wav",SND_ASYNC); //play intro sound
+        resetTimers();
+
+        Form1->Label1->Caption = "Score: " + IntToStr(score);//initial label caption
+
+}
+
+//************************************************************************************
+
 void  createArrayOfTailsSetValues()
 {
 pTail[0] = Form1->Image0;
@@ -320,7 +314,5 @@ pTail[47] = Form1->Image47;
 pTail[48] = Form1->Image48;
 pTail[49] = Form1->Image49;
 pTail[50] = Form1->Image50;
-
-
 }
 

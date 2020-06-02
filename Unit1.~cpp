@@ -93,7 +93,7 @@ void resetTimers()
         score = 0;
 
         //play intro sound
-        //sndPlaySound("snd/intro.wav",SND_ASYNC);
+        sndPlaySound("snd/intro.wav",SND_ASYNC);
         resetTimers();
         //initial label caption
         Form1->Label1->Caption = "Score: " + IntToStr(score);
