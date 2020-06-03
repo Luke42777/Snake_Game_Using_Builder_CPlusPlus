@@ -14,7 +14,7 @@ TForm1 *Form1;
 //////////////////////////////////////////////////////////////////////////////
 struct TheadPath
 {
- int x,y;
+ short int x,y;
 
  TheadPath(int a, int b): x(a), y(b) {}
 };
