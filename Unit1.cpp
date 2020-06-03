@@ -46,6 +46,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::downTimer(TObject *Sender)
 {
   path.push_back(TheadPath(head->Left,head->Top));
+
   head->Top += 20;
 
     if((head->Top + head->Height) >= playField->Height)
@@ -86,13 +87,20 @@ void __fastcall TForm1::downTimer(TObject *Sender)
           Application->Terminate();
         }
     }
+    path.erase(path.begin(), path.end() - score);
+  //free memeory, we just need to track movement of head that much we have tail elements(score),
+  //before that we ignore
 
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::leftTimer(TObject *Sender)
 {
     path.push_back(TheadPath(head->Left,head->Top));
+
+
+
     head->Left -= 20;
+
     if((head->Left) < 0)
     {
       head->Left = playField->Width - head->Width;
@@ -132,13 +140,19 @@ void __fastcall TForm1::leftTimer(TObject *Sender)
           Application->Terminate();
         }
     }
+     path.erase(path.begin(), path.end() - score);
+    //free memeory, we just need to track movement of head that much we have tail elements(score),
+    //before that we ignore
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm1::rightTimer(TObject *Sender)
 {
    path.push_back(TheadPath(head->Left,head->Top));
+
+
    head->Left += 20;
+
    if((head->Left + head->Width) > playField->Width)
     {
       head->Left = 0;
@@ -176,11 +190,18 @@ void __fastcall TForm1::rightTimer(TObject *Sender)
           Application->Terminate();
         }
     }
+     path.erase(path.begin(), path.end() - score);
+   //free memeory, we just need to track movement of head that much we have tail elements(score),
+   //before that we ignore
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::upTimer(TObject *Sender)
 {
     path.push_back(TheadPath(head->Left,head->Top));
+
+
+
     head->Top -= 20;
 
    if(head->Top + 10  <= 0)
@@ -222,6 +243,9 @@ void __fastcall TForm1::upTimer(TObject *Sender)
           Application->Terminate();
         }
     }
+    path.erase(path.begin(), path.end() - score);
+    //free memeory, we just need to track movement of head that much we have tail elements(score),
+    //before that we ignore
 
 }
 //---------------------------------------------------------------------------
