@@ -27,6 +27,7 @@ const int playGroundHeight = 450;
 int xFruit = 0;
 int yFruit = 0;
 int score = 0;
+bool isGamePaused = false;
 
 bool isFruitBeingEaten();
 bool isGameOver();
@@ -230,31 +231,35 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-
 void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
-    if(Key == VK_UP && up->Enabled == false) //(up->Enabled == false)to prevent stopping head when holding key
-  {
+  //pausing the game
+  if(Key == VK_SPACE )
+   {
+        resetTimers();
+   }
+  if(Key == VK_UP && up->Enabled == false) //(up->Enabled == false)to prevent stopping head when holding key
+   {
         head->Picture->LoadFromFile("img/leb.bmp");
         resetTimers();
         up->Enabled = true;
-
    }
+
+
   if(Key == VK_LEFT && left->Enabled == false)
-  {
+   {
         head->Picture->LoadFromFile("img/lebWlewo.bmp");
         resetTimers();
         left->Enabled = true;
    }
 
   if(Key == VK_DOWN && down->Enabled == false)
- {
+  {
         head->Picture->LoadFromFile("img/lebWdol.bmp");
         resetTimers();
         down->Enabled = true;
- }
+  }
  if(Key == VK_RIGHT && right->Enabled == false   )
  {
        head->Picture->LoadFromFile("img/lebWprawo.bmp");
@@ -402,6 +407,36 @@ pTail[47] = Form1->Image47;
 pTail[48] = Form1->Image48;
 pTail[49] = Form1->Image49;
 pTail[50] = Form1->Image50;
+pTail[51] = Form1->Image51;
+pTail[52] = Form1->Image52;
+pTail[53] = Form1->Image53;
+pTail[54] = Form1->Image54;
+pTail[55] = Form1->Image55;
+pTail[56] = Form1->Image56;
+pTail[57] = Form1->Image57;
+pTail[58] = Form1->Image58;
+pTail[59] = Form1->Image59;
+pTail[60] = Form1->Image60;
+pTail[61] = Form1->Image61;
+pTail[62] = Form1->Image62;
+pTail[63] = Form1->Image63;
+pTail[64] = Form1->Image64;
+pTail[65] = Form1->Image65;
+pTail[66] = Form1->Image66;
+pTail[67] = Form1->Image67;
+pTail[68] = Form1->Image68;
+pTail[69] = Form1->Image69;
+pTail[70] = Form1->Image70;
+pTail[71] = Form1->Image71;
+pTail[72] = Form1->Image72;
+pTail[73] = Form1->Image73;
+pTail[74] = Form1->Image74;
+pTail[75] = Form1->Image75;
+pTail[76] = Form1->Image76;
+pTail[77] = Form1->Image77;
+pTail[78] = Form1->Image78;
+pTail[79] = Form1->Image79;
+pTail[80] = Form1->Image80;
 }
 
 void __fastcall TForm1::QR1Click(TObject *Sender)
@@ -412,7 +447,7 @@ void __fastcall TForm1::QR1Click(TObject *Sender)
 
 void __fastcall TForm1::VisitprojectGitHubrepository1Click(TObject *Sender)
 {
-  ShellExecute(NULL,"open"," https://github.com/Luke42777/Snake_Game_Using_Builder_CPlusPlus.git",NULL,NULL,SW_SHOWNORMAL);
+  ShellExecute(NULL,"open","https://github.com/Luke42777/Snake_Game_Using_Builder_CPlusPlus.git",NULL,NULL,SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 

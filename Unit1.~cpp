@@ -27,6 +27,7 @@ const int playGroundHeight = 450;
 int xFruit = 0;
 int yFruit = 0;
 int score = 0;
+bool isGamePaused = false;
 
 bool isFruitBeingEaten();
 bool isGameOver();
@@ -230,31 +231,35 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-
 void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
-    if(Key == VK_UP && up->Enabled == false) //(up->Enabled == false)to prevent stopping head when holding key
-  {
+  //pausing the game
+  if(Key == VK_SPACE )
+   {
+        resetTimers();
+   }
+  if(Key == VK_UP && up->Enabled == false) //(up->Enabled == false)to prevent stopping head when holding key
+   {
         head->Picture->LoadFromFile("img/leb.bmp");
         resetTimers();
         up->Enabled = true;
-
    }
+
+
   if(Key == VK_LEFT && left->Enabled == false)
-  {
+   {
         head->Picture->LoadFromFile("img/lebWlewo.bmp");
         resetTimers();
         left->Enabled = true;
    }
 
   if(Key == VK_DOWN && down->Enabled == false)
- {
+  {
         head->Picture->LoadFromFile("img/lebWdol.bmp");
         resetTimers();
         down->Enabled = true;
- }
+  }
  if(Key == VK_RIGHT && right->Enabled == false   )
  {
        head->Picture->LoadFromFile("img/lebWprawo.bmp");
@@ -412,7 +417,7 @@ void __fastcall TForm1::QR1Click(TObject *Sender)
 
 void __fastcall TForm1::VisitprojectGitHubrepository1Click(TObject *Sender)
 {
-        ShellExecute(NULL,"open"," https://github.com/Luke42777/Snake_Game_Using_Builder_CPlusPlus.git",NULL,NULL,SW_SHOWNORMAL);       
+  ShellExecute(NULL,"open","https://github.com/Luke42777/Snake_Game_Using_Builder_CPlusPlus.git",NULL,NULL,SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 
